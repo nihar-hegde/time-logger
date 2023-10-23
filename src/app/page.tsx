@@ -1,3 +1,4 @@
+import Calender from '@/components/Calender'
 import Navbar from '@/components/Navbar'
 import { NewLog } from '@/components/NewLog'
 import { Button } from '@/components/ui/button'
@@ -9,6 +10,7 @@ export default function Home() {
       <div className='p-5 space-y-10'>
         <Navbar/>
         <NewLog/>
+        <Calender/>
       </div>
     </main>
   )
