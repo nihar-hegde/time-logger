@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { DatePicker } from "./DatePicker";
+import { useLogStore } from "@/store";
 
 export function NewLog() {
+  const log = useLogStore((state) => state.log);
+  const setLog = useLogStore((state) => state.setLog);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,11 +35,11 @@ export function NewLog() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="data" className="text-right">
               Date
             </Label>
-            <DatePicker/>
+            <DatePicker />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="hour" className="text-right">
@@ -44,6 +49,10 @@ export function NewLog() {
               id="hour"
               type="number"
               placeholder="Enter Hour"
+              value={log.hour}
+              onChange={(e) =>
+                setLog({ ...log, hour: parseInt(e.target.value) })
+              }
               className="col-span-3"
             />
           </div>
@@ -54,12 +63,16 @@ export function NewLog() {
             <Input
               id="note"
               placeholder="Enter The note of this log"
+              value={log.note}
+              onChange={(e) => setLog({ ...log, note: e.target.value })}
               className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save</Button>
+          <Button type="submit" onClick={() => console.log(log)}>
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
