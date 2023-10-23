@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Table,
@@ -8,8 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useLogStore } from "@/store";
 
 const Logs = () => {
+  const logs = useLogStore((state) => state.logs);
   return (
     <div>
       <Table>
@@ -22,13 +25,18 @@ const Logs = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">
-              {new Date().toDateString()}
-            </TableCell>
-            <TableCell>10</TableCell>
-            <TableCell>This is a place Holder notes</TableCell>
-          </TableRow>
+          {Object.keys(logs).map((key) => {
+            const log = logs[key];
+            return (
+              <TableRow key={key}>
+                <TableCell className="font-medium">
+                  {log.date.toDateString()}
+                </TableCell>
+                <TableCell>{log.hour}</TableCell>
+                <TableCell>{log.note}</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

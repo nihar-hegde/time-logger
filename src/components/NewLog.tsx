@@ -14,10 +14,44 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { DatePicker } from "./DatePicker";
 import { useLogStore } from "@/store";
+import { useToast } from "@/components/ui/use-toast";
+import dayjs from "dayjs";
 
 export function NewLog() {
+  const { toast } = useToast();
   const log = useLogStore((state) => state.log);
   const setLog = useLogStore((state) => state.setLog);
+  const setLogs = useLogStore((state) => state.setLogs);
+
+  const closeDiolog = () => {
+    document.getElementById("close-btn")?.click();
+  };
+
+  const validateLog = () => {
+    if (!log.date || !log.hour || log.hour === 0) {
+      throw "Date or Hour cannot be empty";
+    } else if (log.hour > 24) {
+      throw "Please enter a valid hour";
+    }
+  };
+
+  const submitLog = () => {
+    try {
+      validateLog();
+      setLogs(log, dayjs(log.date).format("DD-MM-YYYY"));
+      toast({
+        title: "Log Created Successfully",
+        description: `${log.hour} Hours on ${log.date.toDateString()} `,
+      });
+      closeDiolog();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed to create Log",
+        description: error as string,
+      });
+    }
+  };
 
   return (
     <Dialog>
@@ -70,7 +104,7 @@ export function NewLog() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => console.log(log)}>
+          <Button type="submit" onClick={submitLog}>
             Save
           </Button>
         </DialogFooter>
